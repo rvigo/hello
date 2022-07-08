@@ -37,16 +37,12 @@ jobs:
         include:
           - target: x86_64-apple-darwin
             os: macos
-            compress: zip
           - target: x86_64-unknown-linux-gnu
             os: ubuntu
-            compress: tar.gz
           - target: aarch64-unknown-linux-gnu
             os: ubuntu
-            compress: tar.gz
           - target: aarch64-apple-darwin
             os: macos
-            compress: zip
 
     steps:
       - name: Checkout
@@ -61,39 +57,21 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          use-cross: ${{ matrix.os == 'ubuntu' }}
+          use-cross: matrix.os == 'ubuntu'
           args: --release --bins --target ${{ matrix.target }}
       - name: Rename artifacts
         run: |
           mv target/${{ matrix.target }}/release/hello target/${{ matrix.target }}/release/hello-${{ matrix.target }}
 
-      - name: Test
-        if: ${{ matrix.os }} == 'macos'
-        run: echo macos
-
       - name: Zip artifacts
-        if: startsWith(${{ matrix.os }}, 'macos')
+        if: matrix.os == 'macos'
         run: zip hello-${{ matrix.target }}.zip target/${{ matrix.target }}/release/hello-${{ matrix.target }}
 
       - name: Tar artifacts
-        if: ${{ matrix.os }} == 'ubuntu'
+        if: matrix.os == 'ubuntu'
         run: |
           tar -czvf hello-${{ matrix.target }}.tar.gz target/${{ matrix.target }}/release/hello-${{ matrix.target }}
-          pwd
-          ls -l
-
-      # - name: Upload artifacts
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: hello-${{ matrix.target }}.${{ matrix.compress }}
-      #     path: |
-      #       target/${{ matrix.target }}/release/hello-${{ matrix.target }}.${{ matrix.compress }}
-      # - name: Download artifacts
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: hello-${{ matrix.target }}.${{ matrix.compress }}
-      #     path: target/${{ matrix.target }}/release
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: hello-${{ matrix.target }}.${{ matrix.compress }}
+          files: hello-${{ matrix.target }}.*
