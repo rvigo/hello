@@ -74,5 +74,5 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body: CHANGELOG.md
+          body_path: CHANGELOG.md
           files: hello-${{ matrix.target }}.*
