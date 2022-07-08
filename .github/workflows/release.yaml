@@ -79,8 +79,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
-          name: hello-${{ matrix.target }}.*
-          path: target/${{ matrix.target }}/release
+          path: target/${{ matrix.target }}/release/hello-${{ matrix.target }}.*
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
