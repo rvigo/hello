@@ -58,7 +58,7 @@ jobs:
           use-cross: ${{ matrix.os == 'ubuntu' }}
           args: --release --bins --target ${{ matrix.target }}
       - name: Rename artifacts
-        run: mv /target/${{ matrix.target }}/hello /target/${{ matrix.target }}/hello-${{ matrix.target }}
+        run: mv /target/${{ matrix.target }}/release/hello /target/${{ matrix.target }}/release/hello-${{ matrix.target }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
