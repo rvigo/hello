@@ -57,12 +57,14 @@ jobs:
           command: build
           use-cross: ${{ matrix.os == 'ubuntu' }}
           args: --release --bins --target ${{ matrix.target }}
+      - name: Rename artifacts
+        run: mv /target/${{ matrix.target }}/hello /target/${{ matrix.target }}/hello-${{ matrix.target }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.target }}
           path: |
-            target/${{ matrix.target }}/release/${{ matrix.target }}
+            target/${{ matrix.target }}/release/hello-${{ matrix.target }}
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
@@ -71,4 +73,4 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: target/${{ matrix.target }}/release/${{ matrix.target }}
+          files: target/${{ matrix.target }}/release/hello-${{ matrix.target }}
