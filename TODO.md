@@ -1,0 +1,1 @@
+- [ ] release should get only changes includes in the new version
