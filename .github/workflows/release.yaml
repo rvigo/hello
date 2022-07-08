@@ -77,7 +77,10 @@ jobs:
 
       - name: Tar artifacts
         if: ${{ matrix.os }} == 'ubuntu'
-        run: tar -czvf hello-${{ matrix.target }}.tar.gz target/${{ matrix.target }}/release/hello-${{ matrix.target }}
+        run: |
+          tar -czvf hello-${{ matrix.target }}.tar.gz target/${{ matrix.target }}/release/hello-${{ matrix.target }}
+          pwd
+          ls -l
 
       # - name: Upload artifacts
       #   uses: actions/upload-artifact@v2
