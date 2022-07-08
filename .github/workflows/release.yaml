@@ -75,7 +75,7 @@ jobs:
         with:
           name: ${{ matrix.target }}
           path: |
-            target/${{ matrix.target }}/release/hello-${{ matrix.target }}
+            target/${{ matrix.target }}/release/hello-${{ matrix.target }}.*
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
@@ -84,4 +84,4 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: target/${{ matrix.target }}/release/hello-${{ matrix.target }}
+          files: target/${{ matrix.target }}/release/hello-${{ matrix.target }}.*
