@@ -68,11 +68,11 @@ jobs:
           mv target/${{ matrix.target }}/release/hello target/${{ matrix.target }}/release/hello-${{ matrix.target }}
 
       - name: Zip artifacts
-        if: contains('mac', ${{ matrix.os }})
+        if: ${{ matrix.os }} == macos
         run: zip hello-${{ matrix.target }}.zip target/${{ matrix.target }}/release/hello-${{ matrix.target }}
 
       - name: Tar artifacts
-        if: contains('ubuntu', ${{ matrix.os }})
+        if: ${{ matrix.os }} == 'ubuntu'
         run: tar -czvf hello-${{ matrix.target }}.tar.gz target/${{ matrix.target }}/release/hello-${{ matrix.target }}
 
       - name: Upload artifacts
