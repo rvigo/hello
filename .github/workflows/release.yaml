@@ -61,6 +61,15 @@ jobs:
       - name: Rename artifacts
         run: |
           mv target/${{ matrix.target }}/release/hello target/${{ matrix.target }}/release/hello-${{ matrix.target }}
+
+      - name: Zip artifacts
+        if: contains('mac', ${{ matrix.os }})
+        run: zip hello-${{ matrix.target }}.zip hello-${{ matrix.target }}
+
+      - name: Tar artifacts
+        if: contains('ubuntu', ${{ matrix.os }})
+        run: tar -czvf hello-${{ matrix.target }}.tar.gz hello-${{ matrix.target }}
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
         with:
