@@ -68,11 +68,11 @@ jobs:
           mv target/${{ matrix.target }}/release/hello target/${{ matrix.target }}/release/hello-${{ matrix.target }}
 
       - name: Test
-        if: ${{ matrix.os }} == macos
+        if: ${{ matrix.os }} == 'macos'
         run: echo macos
 
       - name: Zip artifacts
-        if: ${{ matrix.os }} == macos
+        if: startsWith(${{ matrix.os }}, 'macos')
         run: zip hello-${{ matrix.target }}.zip target/${{ matrix.target }}/release/hello-${{ matrix.target }}
 
       - name: Tar artifacts
