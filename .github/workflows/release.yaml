@@ -64,11 +64,11 @@ jobs:
 
       - name: Zip artifacts
         if: contains('mac', ${{ matrix.os }})
-        run: zip hello-${{ matrix.target }}.zip hello-${{ matrix.target }}
+        run: zip hello-${{ matrix.target }}.zip target/${{ matrix.target }}/release/hello-${{ matrix.target }}
 
       - name: Tar artifacts
         if: contains('ubuntu', ${{ matrix.os }})
-        run: tar -czvf hello-${{ matrix.target }}.tar.gz hello-${{ matrix.target }}
+        run: tar -czvf hello-${{ matrix.target }}.tar.gz target/${{ matrix.target }}/release/hello-${{ matrix.target }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v2
