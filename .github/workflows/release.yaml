@@ -37,12 +37,17 @@ jobs:
         include:
           - target: x86_64-apple-darwin
             os: macos
+            compress: zip
           - target: x86_64-unknown-linux-gnu
             os: ubuntu
+            compress: tar.gz
           - target: aarch64-unknown-linux-gnu
             os: ubuntu
+            compress: tar.gz
           - target: aarch64-apple-darwin
             os: macos
+            compress: zip
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -75,12 +80,13 @@ jobs:
         with:
           name: ${{ matrix.target }}
           path: |
-            target/${{ matrix.target }}/release/hello-${{ matrix.target }}.*
+            target/${{ matrix.target }}/release/hello-${{ matrix.target }}.${{ matrix.compress }}
       - name: Download artifacts
         uses: actions/download-artifact@v2
         with:
-          path: target/${{ matrix.target }}/release/hello-${{ matrix.target }}.*
+          name: hello-${{ matrix.target }}.${{ matrix.compress }}
+          path: target/${{ matrix.target }}/release
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: target/${{ matrix.target }}/release/hello-${{ matrix.target }}.*
+          files: target/${{ matrix.target }}/release/hello-${{ matrix.target }}.${{ matrix.compress }}
