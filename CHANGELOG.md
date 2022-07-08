@@ -2,7 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.0.1] - 2022-07-08
+## [1.2.0] - 2022-07-08
+
+### Features
+
+- Includes new message
+
+## [1.1.0] - 2022-07-08
+
+### Documentation
+
+- Bump CHANGELOG.md
+
+## [1.0.0] - 2022-07-08
 
 ### Documentation
 
