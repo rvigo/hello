@@ -9,7 +9,26 @@ on:
       - "v*"
 
 jobs:
+  clippy:
+    name: Lints
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          profile: minimal
+          components: clippy
+          override: true
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check the lints
+        uses: actions-rs/cargo@v1
+        with:
+          command: clippy
+          args: --verbose -- -D warnings
   create_release:
+    needs: clippy
     name: Create Release
     runs-on: ubuntu-latest
     steps:
@@ -43,10 +62,11 @@ jobs:
         shell: bash
         run: |
           r=$(cat ${{ steps.git-cliff.outputs.changelog }})
-          r="${r//'%'/'%25'}"     
-          r="${r//$'\n'/'%0A'}"   
-          r="${r//$'\r'/'%0D'}"  
-          echo "::set-output name=RELEASE_BODY::$r"
+          r="$(printf "$r" | tail -n +3)"
+          r="${r//'%'/'%25'}"
+          r="${r//$'\n'/'%0A'}"
+          r="${r//$'\r'/'%0D'}"
+          echo "::set-output name=release_body::$r"
   build:
     needs: create_release
     runs-on: ${{ matrix.os }}-latest
@@ -100,5 +120,5 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body: ${{ needs.create_release.outputs.release-body }}
+          body: ${{ needs.create_release.outputs.release_body }}
           files: hello-${{ matrix.target }}.*
