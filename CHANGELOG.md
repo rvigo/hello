@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2022-07-09
+
+### Documentation
+
+- Includes TODO.md file
+
+### Features
+
+- Includes new print line
+
+### Ci
+
+- Changes workflow file
+
 ## [1.2.0] - 2022-07-08
 
 ### Features
