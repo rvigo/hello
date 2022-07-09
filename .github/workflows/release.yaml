@@ -43,9 +43,9 @@ jobs:
         shell: bash
         run: |
           r=$(cat ${{ steps.git-cliff.outputs.changelog }})
-          r="${r//'%'/'%25'}"     # Multiline escape sequences for %
-          r="${r//$'\n'/'%0A'}"   # Multiline escape sequences for '\n'
-          r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
+          r="${r//'%'/'%25'}"     
+          r="${r//$'\n'/'%0A'}"   
+          r="${r//$'\r'/'%0D'}"  
           echo "::set-output name=RELEASE_BODY::$r"
   build:
     needs: create_release
