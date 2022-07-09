@@ -39,7 +39,7 @@ jobs:
         run: |
           ls -l
       - name: Create release body
-        id: release
+        id: release-body
         shell: bash
         run: |
           r=$(cat ${{ steps.git-cliff.outputs.changelog }})
@@ -100,5 +100,5 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body: ${{ needs.changelog.outputs.release_body }}
+          body: ${{ needs.create_release.outputs.release-body }}
           files: hello-${{ matrix.target }}.*
