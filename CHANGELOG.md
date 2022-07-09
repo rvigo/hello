@@ -2,7 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.1] - 2022-07-09
+
+### Ci
+
+- Changes file name
+
 ## [1.4.0] - 2022-07-09
+
+### Documentation
+
+- Bumps CHANGELOG.md
 
 ### Features
 

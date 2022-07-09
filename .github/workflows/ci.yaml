@@ -9,8 +9,28 @@ on:
       - "v*"
 
 jobs:
+  format:
+    name: Source formatting check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: nightly
+          override: true
+          components: rustfmt
+
+      - name: Check formatting
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: -- --check
   clippy:
-    name: Lints
+    name: Lint
     runs-on: ubuntu-20.04
     steps:
       - name: Install toolchain
@@ -28,7 +48,7 @@ jobs:
           command: clippy
           args: --verbose -- -D warnings
   create_release:
-    needs: clippy
+    needs: [clippy, format]
     name: Create Release
     runs-on: ubuntu-latest
     outputs:
@@ -102,6 +122,8 @@ jobs:
           toolchain: stable
           default: true
           target: ${{ matrix.target }}
+      - name: Test
+        run: cargo test
       - name: Build
         uses: actions-rs/cargo@v1
         with:
