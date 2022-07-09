@@ -23,7 +23,27 @@ jobs:
           release_name: ${{ github.ref }}
           draft: false
           prerelease: false
+
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v1
+        id: git-cliff
+        with:
+          config: cliff.toml
+          args: -vv --latest --strip header
+        env:
+          OUTPUT: CHANGES.md
+
+      - name: Create release changelog
+        id: release
+        shell: bash
+        run: |
+          r=$(cat ${{ steps.git-cliff.outputs.changelog }})
+          r="${r//'%'/'%25'}"     # Multiline escape sequences for %
+          r="${r//$'\n'/'%0A'}"   # Multiline escape sequences for '\n'
+          r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
+          echo "::set-output name=RELEASE_BODY::$r"
   build:
+    needs: changelog
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
@@ -61,25 +81,6 @@ jobs:
           command: build
           use-cross: ${{ matrix.os == 'ubuntu' }}
           args: --release --bins --target ${{ matrix.target }}
-      - name: Generate a changelog
-        uses: orhun/git-cliff-action@v1
-        id: git-cliff
-        with:
-          config: cliff.toml
-          args: -vv --latest --strip header
-        env:
-          OUTPUT: CHANGES.md
-
-      - name: Create release changelog
-        id: release
-        shell: bash
-        run: |
-          r=$(cat ${{ steps.git-cliff.outputs.changelog }})
-          r="${r//'%'/'%25'}"     # Multiline escape sequences for %
-          r="${r//$'\n'/'%0A'}"   # Multiline escape sequences for '\n'
-          r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
-          echo "::set-output name=RELEASE_BODY::$r"
-
       - name: Rename artifacts
         run: |
           mv target/${{ matrix.target }}/release/hello target/${{ matrix.target }}/release/hello-${{ matrix.target }}
@@ -94,5 +95,5 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: CHANGES.md
+          body_path: ${{ needs.changelog.outputs.release_body }}
           files: hello-${{ matrix.target }}.*
