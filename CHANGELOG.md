@@ -2,11 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2022-07-09
+
+### Features
+
+- Removes two lines
+
 ## [1.3.0] - 2022-07-09
 
 ### Documentation
 
 - Includes TODO.md file
+- Bump readme.md
 
 ### Features
 
@@ -15,6 +22,15 @@ All notable changes to this project will be documented in this file.
 ### Ci
 
 - Changes workflow file
+- Trigger ci
+- Trigger ci
+- Trigger ci
+- Trigger ci
+- Trigger ci
+- Trigger ci
+- Trigger ci
+- Trigger ci
+- Trigger ci
 
 ## [1.2.0] - 2022-07-08
 
