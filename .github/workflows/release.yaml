@@ -27,7 +27,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Generate a changelog
+      - name: Generate changelog
         uses: orhun/git-cliff-action@v1
         id: git-cliff
         with:
@@ -100,5 +100,5 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: ${{ needs.changelog.outputs.release_body }}
+          body: ${{ needs.changelog.outputs.release_body }}
           files: hello-${{ matrix.target }}.*
