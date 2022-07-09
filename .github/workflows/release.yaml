@@ -31,6 +31,8 @@ jobs:
     needs: clippy
     name: Create Release
     runs-on: ubuntu-latest
+    outputs:
+      release_body: ${{ steps.release.outputs.RELEASE_BODY }}
     steps:
       - name: Create Release
         id: create_release
@@ -58,7 +60,7 @@ jobs:
         run: |
           ls -l
       - name: Create release body
-        id: release-body
+        id: release
         shell: bash
         run: |
           r=$(cat ${{ steps.git-cliff.outputs.changelog }})
