@@ -23,7 +23,10 @@ jobs:
           release_name: ${{ github.ref }}
           draft: false
           prerelease: false
-
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Generate a changelog
         uses: orhun/git-cliff-action@v1
         id: git-cliff
