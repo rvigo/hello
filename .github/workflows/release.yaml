@@ -43,7 +43,7 @@ jobs:
           r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
           echo "::set-output name=RELEASE_BODY::$r"
   build:
-    needs: changelog
+    needs: create_release
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
