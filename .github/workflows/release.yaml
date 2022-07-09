@@ -1,4 +1,4 @@
-name: Release
+name: Build & Release
 
 permissions:
   contents: write
@@ -43,30 +43,50 @@ jobs:
             os: ubuntu
           - target: aarch64-apple-darwin
             os: macos
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           default: true
           target: ${{ matrix.target }}
-      - name: Release build
+      - name: Build
         uses: actions-rs/cargo@v1
         with:
           command: build
           use-cross: ${{ matrix.os == 'ubuntu' }}
           args: --release --bins --target ${{ matrix.target }}
+      - name: Generate a changelog
+        uses: orhun/git-cliff-action@v1
+        id: git-cliff
+        with:
+          config: cliff.toml
+          args: -vv --latest --strip header
+        env:
+          OUTPUT: CHANGES.md
+
+      - name: Create release changelog
+        id: release
+        shell: bash
+        run: |
+          r=$(cat ${{ steps.git-cliff.outputs.changelog }})
+          r="${r//'%'/'%25'}"     # Multiline escape sequences for %
+          r="${r//$'\n'/'%0A'}"   # Multiline escape sequences for '\n'
+          r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
+          echo "::set-output name=RELEASE_BODY::$r"
+
       - name: Rename artifacts
         run: |
           mv target/${{ matrix.target }}/release/hello target/${{ matrix.target }}/release/hello-${{ matrix.target }}
-
       - name: Zip artifacts
         if: matrix.os == 'macos'
-        run: zip hello-${{ matrix.target }}.zip target/${{ matrix.target }}/release/hello-${{ matrix.target }}
-
+        run: |
+          zip hello-${{ matrix.target }}.zip target/${{ matrix.target }}/release/hello-${{ matrix.target }}
       - name: Tar artifacts
         if: matrix.os == 'ubuntu'
         run: |
@@ -74,5 +94,5 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: CHANGELOG.md
+          body_path: CHANGES.md
           files: hello-${{ matrix.target }}.*
