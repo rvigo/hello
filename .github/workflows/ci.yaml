@@ -89,6 +89,7 @@ jobs:
           r="${r//$'\r'/'%0D'}"
           echo "::set-output name=release_body::$r"
   build:
+    name: Build and release
     needs: create_release
     runs-on: ${{ matrix.os }}-latest
     strategy:
@@ -129,19 +130,42 @@ jobs:
           command: build
           use-cross: ${{ matrix.os == 'ubuntu' }}
           args: --release --bins --target ${{ matrix.target }}
-      - name: Rename artifacts
-        run: |
-          mv target/${{ matrix.target }}/release/hello target/${{ matrix.target }}/release/hello-${{ matrix.target }}
       - name: Zip artifacts
         if: matrix.os == 'macos'
         run: |
-          zip -m -j hello-${{ matrix.target }} target/${{ matrix.target }}/release/hello-${{ matrix.target }}
+          zip -m -j hello-${{ matrix.target }} target/${{ matrix.target }}/release/hello
       - name: Tar artifacts
         if: matrix.os == 'ubuntu'
         run: |
-          tar -czvf hello-${{ matrix.target }}.tar.gz -C target/${{ matrix.target }}/release/hello-${{ matrix.target }}
+          ls target/${{ matrix.target }}/release/
+          tar -czvf hello-${{ matrix.target }}.tar.gz -C target/${{ matrix.target }}/release/ hello
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           body: ${{ needs.create_release.outputs.release_body }}
           files: hello-${{ matrix.target }}.*
+
+  apply_latest_tag:
+    needs: build
+    name: Apply latest tag
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create latest tag
+        uses: actions/github-script@v6
+        with:
+          script: |
+            try {
+                 await github.rest.git.deleteRef({
+                   owner: context.repo.owner,
+                   repo: context.repo.repo,
+                   ref: "refs/tags/latest"
+                 })
+             } catch (e) {
+               console.log("The latest tag doesn't exist yet")
+             }
+             await github.rest.git.createRef({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               ref: "refs/tags/latest",
+               sha: context.sha
+             })
