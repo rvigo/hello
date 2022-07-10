@@ -15,12 +15,11 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v2
-
-      - name: Install Rust toolchain
+      - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: nightly
+          toolchain: stable
           override: true
           components: rustfmt
 
@@ -36,7 +35,7 @@ jobs:
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: nightly
+          toolchain: stable
           profile: minimal
           components: clippy
           override: true
@@ -136,11 +135,11 @@ jobs:
       - name: Zip artifacts
         if: matrix.os == 'macos'
         run: |
-          zip hello-${{ matrix.target }}.zip target/${{ matrix.target }}/release/hello-${{ matrix.target }}
+          zip -m -j hello-${{ matrix.target }} target/${{ matrix.target }}/release/hello-${{ matrix.target }}
       - name: Tar artifacts
         if: matrix.os == 'ubuntu'
         run: |
-          tar -czvf hello-${{ matrix.target }}.tar.gz target/${{ matrix.target }}/release/hello-${{ matrix.target }}
+          tar -czvf hello-${{ matrix.target }}.tar.gz -C target/${{ matrix.target }}/release/hello-${{ matrix.target }}
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
