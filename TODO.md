@@ -1,1 +1,1 @@
-- [ ] release should get only changes includes in the new version
+- [x] release should get only changes includes in the new version

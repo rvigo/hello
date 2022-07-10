@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2022-07-10
+
+### Features
+
+- Add new item
+
+## [1.4.3] - 2022-07-10
+
+### Documentation
+
+- Bumps CHANGELOG.md
+
 ## [1.4.2] - 2022-07-10
 
 ### Ci
