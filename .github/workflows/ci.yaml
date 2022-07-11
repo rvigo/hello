@@ -139,11 +139,16 @@ jobs:
         run: |
           ls target/${{ matrix.target }}/release/
           tar -czvf hello-${{ matrix.target }}.tar.gz -C target/${{ matrix.target }}/release/ hello
+      - name: Generate SHA256
+        run: |
+          shasum -a 256 hello-${{ matrix.target }}* >> checksums.txt
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           body: ${{ needs.create_release.outputs.release_body }}
-          files: hello-${{ matrix.target }}.*
+          files: |
+            hello-${{ matrix.target }}.*
+            checksums.txt
 
   homebrew:
     needs: build

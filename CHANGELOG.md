@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.1] - 2022-07-11
+
+### Ci
+
+- Includes sha256 step
+
 ## [1.6.0] - 2022-07-11
 
 ### Documentation
