@@ -158,28 +158,3 @@ jobs:
           formula: hello
           tap: rvigo/homebrew-hello
           tag: ${{ github.ref }}
-
-  # apply_latest_tag:
-  #   needs: build
-  #   name: Apply latest tag
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Create latest tag
-  #       uses: actions/github-script@v6
-  #       with:
-  #         script: |
-  #           try {
-  #                await github.rest.git.deleteRef({
-  #                  owner: context.repo.owner,
-  #                  repo: context.repo.repo,
-  #                  ref: "refs/tags/latest"
-  #                })
-  #            } catch (e) {
-  #              console.log("The latest tag doesn't exist yet")
-  #            }
-  #            await github.rest.git.createRef({
-  #              owner: context.repo.owner,
-  #              repo: context.repo.repo,
-  #              ref: "refs/tags/latest",
-  #              sha: context.sha
-  #            })
