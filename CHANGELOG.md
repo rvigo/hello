@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.1] - 2022-07-11
+
+### Ci
+
+- Includes homebrew tap update step
+
 ## [1.5.0] - 2022-07-10
 
 ### Features
