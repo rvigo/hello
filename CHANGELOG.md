@@ -2,11 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.3] - 2022-07-12
+
+### Ci
+
+- Adjust bum action
+
 ## [1.6.2] - 2022-07-12
 
 ### Ci
 
-- Adds checksum file
+- Removes checksum step
 
 ## [1.6.1] - 2022-07-11
 

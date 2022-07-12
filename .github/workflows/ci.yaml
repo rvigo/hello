@@ -153,8 +153,6 @@ jobs:
         uses: dawidd6/action-homebrew-bump-formula@v3
         with:
           token: ${{ secrets.GH_TOKEN }}
-          revision: ${{ github.sha }}
-          tag: ${{ github.ref }}
           formula: hello
           tap: rvigo/homebrew-hello
           force: true
