@@ -1,32 +1,41 @@
 # This is an example .goreleaser.yml file with some sensible defaults.
 # Make sure to check the documentation at https://goreleaser.com
-before:
-  hooks:
-    # You may remove this if you don't use go modules.
-    - go mod tidy
-    # you may remove this if you don't need go generate
-    - go generate ./...
+project_name: hello
 builds:
   - env:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
       - darwin
+    main: .github/workflows/dummy.go
+    binary: hello
 archives:
   - replacements:
       darwin: Darwin
       linux: Linux
-      windows: Windows
-      386: i386
       amd64: x86_64
+brews:
+  - name: hello
+    description: "hello app"
+    homepage: https://github.com/rvigo/homebrew-hello
+    tap:
+      owner: rvigo
+      name: homebrew-hello
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+
+    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
+
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
 changelog:
   sort: asc
   filters:
     exclude:
-      - '^docs:'
-      - '^test:'
+      - "^docs:"
+      - "^test:"
+release:
+  disable: true
