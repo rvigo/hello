@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.6.2] - 2022-07-12
+
+### Ci
+
+- Adds checksum file
+
 ## [1.6.1] - 2022-07-11
 
 ### Ci

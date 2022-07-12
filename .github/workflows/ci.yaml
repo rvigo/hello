@@ -115,7 +115,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
@@ -137,19 +136,13 @@ jobs:
       - name: Tar artifacts
         if: matrix.os == 'ubuntu'
         run: |
-          ls target/${{ matrix.target }}/release/
           tar -czvf hello-${{ matrix.target }}.tar.gz -C target/${{ matrix.target }}/release/ hello
-      - name: Generate SHA256
-        run: |
-          shasum -a 256 hello-${{ matrix.target }}* >> checksums.txt
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           body: ${{ needs.create_release.outputs.release_body }}
           files: |
             hello-${{ matrix.target }}.*
-            checksums.txt
-
   homebrew:
     needs: build
     runs-on: ubuntu-latest
@@ -160,6 +153,8 @@ jobs:
         uses: dawidd6/action-homebrew-bump-formula@v3
         with:
           token: ${{ secrets.GH_TOKEN }}
+          revision: ${{ github.sha }}
+          tag: ${{ github.ref }}
           formula: hello
           tap: rvigo/homebrew-hello
-          tag: ${{ github.ref }}
+          force: true
