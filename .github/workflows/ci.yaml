@@ -91,68 +91,76 @@ jobs:
   build:
     name: Build and release
     needs: create_release
-    runs-on: ${{ matrix.os }}-latest
-    strategy:
-      matrix:
-        target:
-          [
-            x86_64-apple-darwin,
-            x86_64-unknown-linux-gnu,
-            aarch64-unknown-linux-gnu,
-            aarch64-apple-darwin,
-          ]
-        include:
-          - target: x86_64-apple-darwin
-            os: macos
-          - target: x86_64-unknown-linux-gnu
-            os: ubuntu
-          - target: aarch64-unknown-linux-gnu
-            os: ubuntu
-          - target: aarch64-apple-darwin
-            os: macos
+    runs-on: ubuntu-20.04
     steps:
+      # runs-on: ${{ matrix.os }}-latest
+      # strategy:
+      #   matrix:
+      #     target:
+      #       [
+      #         x86_64-apple-darwin,
+      #         x86_64-unknown-linux-gnu,
+      #         aarch64-unknown-linux-gnu,
+      #         aarch64-apple-darwin,
+      #       ]
+      #     include:
+      #       - target: x86_64-apple-darwin
+      #         os: macos
+      #       - target: x86_64-unknown-linux-gnu
+      #         os: ubuntu
+      #       - target: aarch64-unknown-linux-gnu
+      #         os: ubuntu
+      #       - target: aarch64-apple-darwin
+      #         os: macos
+      # steps:
+
+      #   - name: Install Rust
+      #     uses: actions-rs/toolchain@v1
+      #     with:
+      #       toolchain: stable
+      #       default: true
+      #       target: ${{ matrix.target }}
+      #   - name: Test
+      #     run: cargo test
+      #   - name: Build
+      #     uses: actions-rs/cargo@v1
+      #     with:
+      #       command: build
+      #       use-cross: ${{ matrix.os == 'ubuntu' }}
+      #       args: --release --bins --target ${{ matrix.target }}
+      #   - name: Zip artifacts
+      #     if: matrix.os == 'macos'
+      #     run: |
+      #       zip -m -j hello-${{ matrix.target }} target/${{ matrix.target }}/release/hello
+      #   - name: Tar artifacts
+      #     if: matrix.os == 'ubuntu'
+      #     run: |
+      #       tar -czvf hello-${{ matrix.target }}.tar.gz -C target/${{ matrix.target }}/release/ hello
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
+      - name: Set up Go
+        uses: actions/setup-go@v2
+
+      - name: Release binaries
+        uses: goreleaser/goreleaser-action@v2
         with:
-          toolchain: stable
-          default: true
-          target: ${{ matrix.target }}
-      - name: Test
-        run: cargo test
-      - name: Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          use-cross: ${{ matrix.os == 'ubuntu' }}
-          args: --release --bins --target ${{ matrix.target }}
-      - name: Zip artifacts
-        if: matrix.os == 'macos'
-        run: |
-          zip -m -j hello-${{ matrix.target }} target/${{ matrix.target }}/release/hello
-      - name: Tar artifacts
-        if: matrix.os == 'ubuntu'
-        run: |
-          tar -czvf hello-${{ matrix.target }}.tar.gz -C target/${{ matrix.target }}/release/ hello
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          body: ${{ needs.create_release.outputs.release_body }}
-          files: |
-            hello-${{ matrix.target }}.*
-  homebrew:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Bump formulae
-        uses: dawidd6/action-homebrew-bump-formula@v3
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          formula: hello
-          tap: rvigo/homebrew-hello
-          force: true
+          version: latest
+          args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+  # homebrew:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Bump formulae
+  #       uses: dawidd6/action-homebrew-bump-formula@v3
+  #       with:
+  #         token: ${{ secrets.GH_TOKEN }}
+  #         formula: hello
+  #         tap: rvigo/homebrew-hello
+  #         force: true
