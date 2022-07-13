@@ -50,8 +50,6 @@ jobs:
     needs: [clippy, format]
     name: Create Release
     runs-on: ubuntu-latest
-    outputs:
-      release_body: ${{ steps.release.outputs.RELEASE_BODY }}
     steps:
       - name: Create Release
         id: create_release
@@ -63,31 +61,6 @@ jobs:
           release_name: ${{ github.ref }}
           draft: false
           prerelease: false
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Generate changelog
-        uses: orhun/git-cliff-action@v1
-        id: git-cliff
-        with:
-          config: cliff.toml
-          args: -vv --latest --strip header
-        env:
-          OUTPUT: CHANGES.md
-      - name: Validate files
-        run: |
-          ls -l
-      - name: Create release body
-        id: release
-        shell: bash
-        run: |
-          r=$(cat ${{ steps.git-cliff.outputs.changelog }})
-          r="$(printf "$r" | tail -n +3)"
-          r="${r//'%'/'%25'}"
-          r="${r//$'\n'/'%0A'}"
-          r="${r//$'\r'/'%0D'}"
-          echo "::set-output name=release_body::$r"
   build:
     name: Build and release
     needs: create_release
@@ -172,6 +145,6 @@ jobs:
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
-          args: release --rm-dist
+          args: release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
