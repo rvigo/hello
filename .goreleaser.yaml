@@ -9,10 +9,13 @@ builds:
       - darwin
     main: .github/workflows/dummy.go
     binary: hello
+    hooks:
+      post:
+        - ./.github/workflows/post_build.sh
 archives:
   - replacements:
-      darwin: Darwin
-      linux: Linux
+      darwin: darwin
+      linux: linux
       amd64: x86_64
 brews:
   - name: hello

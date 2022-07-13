@@ -70,10 +70,11 @@ jobs:
         target:
           [
             x86_64-apple-darwin,
-            x86_64-unknown-linux-gnu,
             aarch64-unknown-linux-gnu,
             aarch64-apple-darwin,
+            x86_64-unknown-linux-gnu,
           ]
+
         include:
           - target: x86_64-apple-darwin
             os: macos
@@ -114,31 +115,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Create dist dir
-        run: |
-          mkdir -p dist/
       - name: Download darwin_arm64
         uses: actions/download-artifact@v3
         with:
           name: hello-aarch64-apple-darwin
-          path: dist/darwin_arm64/hello
+          path: target/aarch64-apple-darwin/release/
       - name: Download darwin_amd64_v1
         uses: actions/download-artifact@v3
         with:
           name: hello-x86_64-apple-darwin
-          path: dist/darwin_amd64_v1/hello
+          path: target/x86_64-apple-darwin/release/
       - name: Download linux_amd64_v1
         uses: actions/download-artifact@v3
         with:
           name: hello-x86_64-unknown-linux-gnu
-          path: dist/linux_amd64_v1/hello
+          path: target/x86_64-unknown-linux-gnu/release/
       - name: Download linux_arm64
         uses: actions/download-artifact@v3
         with:
           name: hello-aarch64-unknown-linux-gnu
-          path: dist/linux_arm64/hello
+          path: target/aarch64-unknown-linux-gnu/release/
       - name: Set up Go
         uses: actions/setup-go@v2
       - name: Release binaries
@@ -148,3 +144,6 @@ jobs:
           args: release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Check success
+        run: |
+          ls -l *.done
