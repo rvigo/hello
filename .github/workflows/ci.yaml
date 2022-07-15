@@ -135,6 +135,9 @@ jobs:
         with:
           name: hello-aarch64-unknown-linux-gnu
           path: target/aarch64-unknown-linux-gnu/release/
+      - name: Check file
+        run: |
+          ls -la target/x86_64-unknown-linux-gnu/release/
       - name: Set up Go
         uses: actions/setup-go@v2
       - name: Release binaries
