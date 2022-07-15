@@ -11,7 +11,7 @@ builds:
     binary: hello
     hooks:
       post:
-        - ./.github/workflows/post_build.sh
+        - sh .github/workflows/post_build.sh
 archives:
   - replacements:
       darwin: darwin

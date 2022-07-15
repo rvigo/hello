@@ -1,4 +1,4 @@
 fn main() {
     println!("Hello, world!");
-    print!("v1.6.7")
+    print!("v1.7.0")
 }
