@@ -144,7 +144,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
-          args: release --debug
+          args: release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
       - name: Check Result
