@@ -1,5 +1,3 @@
-# This is an example .goreleaser.yml file with some sensible defaults.
-# Make sure to check the documentation at https://goreleaser.com
 project_name: hello
 builds:
   - env:
@@ -7,6 +5,9 @@ builds:
     goos:
       - linux
       - darwin
+    goarch:
+      - amd64
+      - arm64
     main: .github/workflows/dummy.go
     binary: hello
     hooks:
