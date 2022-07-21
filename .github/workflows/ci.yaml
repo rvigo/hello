@@ -47,7 +47,7 @@ jobs:
           command: clippy
           args: --verbose -- -D warnings
   build:
-    name: Build and release
+    name: Build
     needs: [clippy, format]
     runs-on: ${{ matrix.os }}-latest
     strategy:
