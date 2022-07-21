@@ -23,13 +23,13 @@ if [ -f "$ARM64_DARWIN" ]; then
     echo "replacing arm64 apple bin"
     
     error=$(rm -f dist/hello_darwin_arm64/hello \
-    && mv $ARM64_DARWIN dist/hello_darwin_arm64/hello)
+    && mv $ARM64_DARWIN dist/hello_darwin_arm64/hello 2>&1 )
 fi
 if [ -f "$ARM64_LINUX" ]; then
     echo "replacing arm64 linux bin"
     
     error=$(rm -f dist/hello_linux_arm64/hello \
-    && mv $ARM64_LINUX dist/hello_linux_arm64/hello)
+    && mv $ARM64_LINUX dist/hello_linux_arm64/hello 2>&1 )
 fi
 
 touch result.done
