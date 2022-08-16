@@ -123,6 +123,8 @@ jobs:
       - name: Check file
         run: |
           ls -la target/x86_64-unknown-linux-gnu/release/
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Set up Go
         uses: actions/setup-go@v2
       - name: Release binaries
