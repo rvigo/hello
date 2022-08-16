@@ -1,5 +1,4 @@
 fn main() {
-    println!("Hello, world!");
-    println!("v1.9.1");
-    println!("Goodbye, world!")
+    println!("Hello, world!aaa");
+    println!("v1.10.0");
 }
