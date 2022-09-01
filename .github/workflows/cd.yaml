@@ -7,7 +7,7 @@ on:
 
 jobs:
   format:
-    name: Source formatting check
+    name: fmt
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
@@ -19,14 +19,13 @@ jobs:
           toolchain: stable
           override: true
           components: rustfmt
-
       - name: Check formatting
         uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: -- --check
+          args: --all -- --check
   clippy:
-    name: Lint
+    name: clippy
     runs-on: ubuntu-20.04
     steps:
       - name: Install toolchain
@@ -42,9 +41,9 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --verbose -- -D warnings
+          args: -- -D warnings
   test:
-    name: Test
+    name: test
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
