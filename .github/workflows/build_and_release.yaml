@@ -26,9 +26,7 @@ jobs:
         continue-on-error: false
         with:
           path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/
-            ~/.cargo/git/db/
+            ~/.cargo/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
       - uses: actions-rs/cargo@v1
@@ -52,9 +50,7 @@ jobs:
         continue-on-error: false
         with:
           path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/
-            ~/.cargo/git/db/
+            ~/.cargo/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
       - name: Check formatting
@@ -80,9 +76,7 @@ jobs:
         continue-on-error: false
         with:
           path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/
-            ~/.cargo/git/db/
+            ~/.cargo/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ runner.os }}-cargo-
       - name: Check the lints
@@ -127,10 +121,8 @@ jobs:
         continue-on-error: false
         with:
           path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/
-            ~/.cargo/git/db/
-          key: ${{ matrix.target }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+            ~/.cargo/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: ${{ matrix.target }}-cargo-
       - name: Build
         uses: actions-rs/cargo@v1
