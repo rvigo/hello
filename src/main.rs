@@ -1,3 +1,5 @@
+use std::result::Result;
+
 fn main() {
     println!("{}", get_message());
     println!("v1.10.1");
