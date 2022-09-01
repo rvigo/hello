@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - "*"
+    tags-ignore:
+      - "**"
 
 jobs:
   format:
@@ -66,7 +68,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --locked -- -D warnings
+          args: --locked --frozen -- -D warnings
   test:
     name: test
     runs-on: ubuntu-20.04
