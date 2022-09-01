@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -22,7 +22,18 @@ jobs:
           toolchain: stable
           override: true
           components: rustfmt
-
+      - name: Cargo cache
+        uses: actions/cache@v3
+        continue-on-error: false
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
       - name: Check formatting
         uses: actions-rs/cargo@v1
         with:
@@ -32,6 +43,20 @@ jobs:
     name: clippy
     runs-on: ubuntu-20.04
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Cargo cache
+        uses: actions/cache@v3
+        continue-on-error: false
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -39,8 +64,6 @@ jobs:
           profile: minimal
           components: clippy
           override: true
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Check the lints
         uses: actions-rs/cargo@v1
         with:
@@ -70,16 +93,28 @@ jobs:
           - target: aarch64-apple-darwin
             os: macos
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           default: true
           target: ${{ matrix.target }}
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Cargo cache
+        uses: actions/cache@v3
+        continue-on-error: false
         with:
-          fetch-depth: 0
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
       - name: Test
         run: cargo test
       - name: Build
