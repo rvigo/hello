@@ -8,7 +8,7 @@ builds:
     goarch:
       - amd64
       - arm64
-  - main: .github/workflows/dummy.go
+    main: .github/workflows/dummy.go
     id: hello_dummy
     binary: hello
     hooks:
