@@ -8,16 +8,23 @@ builds:
     goarch:
       - amd64
       - arm64
-    main: .github/workflows/dummy.go
+  - main: .github/workflows/dummy.go
+    id: hello_dummy
     binary: hello
     hooks:
       post:
         - sh .github/workflows/post_build.sh
 archives:
   - replacements:
+      id: hello_archives
       darwin: darwin
       linux: linux
       amd64: x86_64
+    name_template: "{{.Binary}}_{{.Os}}_{{.Arch}}"
+    files:
+      - README.md
+      - LICENSE
+      - completions/**/*
 brews:
   - name: hello
     description: "hello app"
