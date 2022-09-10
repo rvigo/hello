@@ -37,7 +37,7 @@ brews:
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
     install: |-
       bin.install "hello"
-      zsh_completion.install "completion/zsh/_hello" => "_hello"
+      zsh_completion.install "completions/zsh/_hello" => "_hello"
 checksum:
   name_template: "checksums.txt"
 snapshot:
