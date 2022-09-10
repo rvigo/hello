@@ -1,4 +1,4 @@
-#compdef  hello
+#compdef _hello hello
 autoload -U is-at-least
 
 function _hello {
@@ -7,5 +7,3 @@ function _hello {
     "1: :(option1 option2)" \
     "*::arg:->args"
 }
-
-_hello "$@"
