@@ -35,9 +35,10 @@ brews:
       name: goreleaserbot
       email: bot@goreleaser.com
     commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
-    caveats:
-      "In order to get hello completion, add the following line to your ~/.zshrc:
-      source ${HOMEBREW_PREFIX}/share/zsh/site-functions/_hello"
+    caveats: |
+      In order to get hello completion, be sure that $(brew --prefix)/share/zsh/site-functions is present at $FPATH.
+      If not add the following line to your ~/.zshrc:
+      FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}
     install: |-
       bin.install "hello"
       zsh_completion.install "completions/zsh/hello.zsh" => "_hello"
