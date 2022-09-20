@@ -9,14 +9,12 @@ builds:
       - amd64
       - arm64
     main: .github/workflows/dummy.go
-    id: hello_dummy
     binary: hello
     hooks:
       post:
         - sh .github/workflows/post_build.sh
 archives:
   - replacements:
-      id: hello_archives
       darwin: darwin
       linux: linux
       amd64: x86_64
@@ -38,7 +36,7 @@ brews:
     caveats: |
       In order to get hello completion, be sure that $(brew --prefix)/share/zsh/site-functions is present at $FPATH.
       If not add the following line to your ~/.zshrc:
-      FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}
+      FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
     install: |-
       bin.install "hello"
       zsh_completion.install "completions/zsh/hello.zsh" => "_hello"
